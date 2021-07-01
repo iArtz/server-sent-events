@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Front</title>
+</head>
+
+<body>
+	<div id="message"></div>
+	<script>
+		const list = []
+		let source = new EventSource('http://localhost:3000')
+		source.onmessage = event => {
+			const urlParams = new URLSearchParams(window.location.search)
+			const branch = urlParams.get('b')
+			data = JSON.parse(event.data)
+			if (!list.includes(data.message)) {
+				list.push(data.message)
+				console.table(list)
+				if (data.message.split('-')[2] === branch)
+					document.getElementById('message').insertAdjacentHTML('beforeend',
+						`<p>${data.message}</p>`)
+			}
+		}
+	</script>
+</body>
+
+</html>
